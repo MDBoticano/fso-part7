@@ -6,7 +6,6 @@ import Notification from './components/Notification'
 import Bloglist from './components/Bloglist'
 import CreateBlog from './components/CreateBlog'
 
-// import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { useField, useResource } from './hooks/index'
@@ -15,14 +14,8 @@ const App = () => {
   const ASCENDING = 'ascending'
   const DESCENDING = 'descending'
 
-
   /* State values */
-  // const [blogs, setBlogs] = useState([])
   const [blogs, blogService] = useResource('/api/blogs')
-
-  // const [newTitle, setNewTitle] = useState('')
-  // const [newAuthor, setNewAuthor] = useState('')
-  // const [newUrl, setNewUrl] = useState('')
 
   const formTitle = useField('text')
   const formAuthor = useField('text')
@@ -30,15 +23,12 @@ const App = () => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  // const [username, setUsername] = useState('')
-  // const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   const loginUsername = useField('text')
   const loginPassword = useField('password')
 
   const [sortDirection, setSortDirection] = useState(DESCENDING)
-
 
   const sortBlogs = (blogsArray, direction = DESCENDING) => {
     const blogsArrayCopy = [...blogsArray]
@@ -51,38 +41,29 @@ const App = () => {
     return blogsArrayCopy
   }
 
-  
-
   /* useEffect hooks */
   // Get the blogs from the server
   useEffect(() => {
     async function fetchBlogs() {
-      // const initialBlogs = await blogService.getAll()
       const initialBlogs = await blogService.getAll()
-
-      // setBlogs(initialBlogs)
 
       // Load blogs sorted (descending by default)
       const sortedBlogs = sortBlogs(initialBlogs, sortDirection)
-      // setBlogs(sortedBlogs)
       blogService.setValue(sortedBlogs)
     }
-
     fetchBlogs()
+    //eslint-disable-next-line
   }, [sortDirection])
 
   // Check for logged in user
   useEffect(() => {
-    // console.log('logging in user')
     const loggedInUser = window.localStorage.getItem('loggedBlogUser')
     if (loggedInUser) {
-      // console.log('user exists, logging in')
       const user = JSON.parse(loggedInUser)
       setUser(user)
       blogService.setToken(user.token)
-    } else {
-      // console.log('no user, login please')
     }
+    //eslint-disable-next-line
   }, [])
 
   const handleLogin = async (event) => {
@@ -97,8 +78,6 @@ const App = () => {
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      // setUsername('')
-      // setPassword('')
 
       loginUsername.reset()
       loginPassword.reset()
@@ -120,41 +99,26 @@ const App = () => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
     const blogObject = {
-      // title: newTitle,
-      // author: newAuthor,
-      // url: newUrl,
-      
       title: formTitle.value,
       author: formAuthor.value,
       url: formUrl.value,
-
       userId: user.userId
     }
 
     try {
       const newBlog = await blogService.create(blogObject)
       const updatedBlogsList = blogs.concat(newBlog)
-      // setBlogs(updatedBlogsList)
 
-      // to sort after adding:
-      // setBlogs(sortBlogs(updatedBlogsList, sortDirection))
       blogService.setValue(sortBlogs(updatedBlogsList, sortDirection))
 
-      // if (newAuthor) {
       if (formAuthor.value) {
-        // setSuccessMessage(`Added blog ${newTitle} by ${newAuthor}`)
         setSuccessMessage(`Added blog ${formTitle.value} by ${formAuthor.value}`)
       } else {
-        // setSuccessMessage(`Added blog ${newTitle}`)
         setSuccessMessage(`Added blog ${formTitle.value}`)
       }
       setTimeout(() => {
         setSuccessMessage(null)
       }, 5000)
-
-      // setNewTitle('')
-      // setNewAuthor('')
-      // setNewUrl('')
 
       formTitle.reset()
       formAuthor.reset()
@@ -167,7 +131,6 @@ const App = () => {
     }
   }
 
-  /* 5.7: send PUT request to update blog */
   const handleLike = async (blog) => {
     const blogId = blog.id
 
@@ -188,7 +151,6 @@ const App = () => {
           return updatedBlog
         }
       })
-      // setBlogs(updatedBlogsList)
       blogService.setValue(updatedBlogsList)
 
       // to sort blogs after updating:
@@ -208,7 +170,6 @@ const App = () => {
     try {
       if (window.confirm(`Do you want to delete ${blog.title}`)) {
         const updatedBlogsList = await blogService.deleteEntry(blogId)
-        // setBlogs(updatedBlogsList)
         blogService.setValue(updatedBlogsList)
       }
     } catch (error) {
@@ -219,47 +180,26 @@ const App = () => {
     }
   }
 
-  // const handleUsername = ({ target }) => {
-  //   setUsername(target.value)
-  // }
-
-  // const handlePassword = ({ target }) => {
-  //   setPassword(target.value)
-  // }
-
-  // const handleTitle = ({ target }) => {
-  //   setNewTitle(target.value)
-  // }
-
-  // const handleAuthor = ({ target }) => {
-  //   setNewAuthor(target.value)
-  // }
-
-  // const handleUrl = ({ target }) => {
-  //   setNewUrl(target.value)
-  // }
-
   const listSortToggle = () => {
     if (sortDirection === ASCENDING) { setSortDirection(DESCENDING) }
     if (sortDirection === DESCENDING) { setSortDirection(ASCENDING) }
   }
 
   const removeReset = (fieldProp) => {
+    //eslint-disable-next-line
     const { reset, ...restOfProps } = fieldProp
     return restOfProps
   }
 
   const loginForm = () => {
     return (
-    <Toggleable buttonLabel="login">
-      <LoginForm
-        // username={loginUsername.value} handleUsername={loginUsername.onChange}
-        loginUsername={removeReset(loginUsername)}
-        // password={loginPassword.value} handlePassword={loginPassword.onChange}
-        loginPassword={removeReset(loginPassword)}
-        handleLogin={handleLogin}
-      />
-    </Toggleable>
+      <Toggleable buttonLabel="login">
+        <LoginForm
+          loginUsername={removeReset(loginUsername)}
+          loginPassword={removeReset(loginPassword)}
+          handleLogin={handleLogin}
+        />
+      </Toggleable>
     )
   }
 
@@ -274,14 +214,8 @@ const App = () => {
           <Toggleable buttonLabel="new blog" ref={blogFormRef}>
             <CreateBlog
               addBlog={addBlog}
-              // handleTitle={handleTitle} title={newTitle}
-              // handleTitle={formTitle.onChange} title={formTitle.value}
               title={removeReset(formTitle)}
-              // handleAuthor={handleAuthor} author={newAuthor}
-              // handleAuthor={formAuthor.onChange} author={formAuthor.value}
               author={removeReset(formAuthor)}
-              // handleUrl={handleUrl} url={newUrl}
-              // handleUrl={formUrl.onChange} url={formUrl.value}
               url={removeReset(formUrl)}
             />
           </Toggleable>
