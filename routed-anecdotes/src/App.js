@@ -97,7 +97,6 @@ const CreateNew = (props) => {
       </form>
     </div>
   )
-
 }
 
 const CreateNewHistory = withRouter(CreateNew)
@@ -125,6 +124,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    setTimeout( () => {
+      setNotification('')
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -146,6 +149,7 @@ const App = () => {
       <h1>Software anecdotes</h1>
       <Router>
         <Menu />
+        <p>{notification}</p>
         <Route exact path="/" render={() => {
           return <AnecdoteList anecdotes={anecdotes} />
         }} />
