@@ -20,10 +20,10 @@ export const useField = (type) => {
   }
 }
 
+let token = null
+
 export const useResource = (baseUrl) => {
   const [value, setValue ] = useState([])
-
-  let token = null
 
   const setToken = (newToken) => {
     token = `bearer ${newToken}`
