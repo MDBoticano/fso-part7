@@ -1,0 +1,90 @@
+.App {
+  padding: 2em;
+}
+
+#page-title {
+  margin: 0 0 0.5em 0;
+  padding: 0;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#create-blog {
+  margin: 0.25em 0;
+  display: table;
+
+  .blog-input { display: table-row; }
+
+  label { display: table-cell; }
+
+  input { display: table-cell; }
+}
+
+.logged-user {
+  margin: 0 0 .25em 0;
+}
+
+#blog-create-toggleable {
+  margin: 1em 0;
+}
+
+.blog-entry {
+  margin: .5em 0;
+  padding: .5em;
+  border: solid 1px black;
+}
+
+.blog-summary {
+  margin: 0;
+  border: 0px;
+  font-size: 1.25em;
+
+  p { margin: 0; }
+}
+
+.blogDetails{
+  p { margin: .25em 0; }
+
+  .blog-creator {
+    margin: 1em 0 0 0;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+
+    .blog-user {
+      justify-self: start;
+    }
+
+    .blog-delete {
+      justify-self: end;
+    }
+  }
+
+  .blog-likes {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+
+    .num-likes {
+      margin: 0 .5em 0 0;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+put http://localhost:3001/api/blogs/5d56023b5b177b1f68969a21
+Content-Type: application/json
+
+{
+  "title": "My Monday",
+  "author": "Mark",
+  "url": "www.marloboticano.com",
+  "likes": 102
+}
