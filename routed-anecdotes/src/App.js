@@ -74,6 +74,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.history.push('/')
   }
 
   return (
@@ -98,6 +99,8 @@ const CreateNew = (props) => {
   )
 
 }
+
+const CreateNewHistory = withRouter(CreateNew)
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -147,7 +150,7 @@ const App = () => {
           return <AnecdoteList anecdotes={anecdotes} />
         }} />
         <Route exact path="/create" render={() => {
-          return <CreateNew addNew={addNew} />
+          return <CreateNewHistory addNew={addNew} />
         }} />
         <Route exact path="/about" render={() => {
           return  <About />
