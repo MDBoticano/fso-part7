@@ -1,7 +1,9 @@
 const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION'
 const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION'
+let notifCount = 0
 
 /* Action Creators */
+/** @param {object} content - contains the message and style type to display */
 const createNotification = (content) => {
   return {
     type: CREATE_NOTIFICATION,
@@ -9,9 +11,11 @@ const createNotification = (content) => {
   }
 }
 
-const removeNotification = () => {
+/** @param {Number} id - id count to identify overlaps during removal */
+const removeNotification = (id) => {
   return {
     type: REMOVE_NOTIFICATION,
+    id
   }
 }
 
@@ -19,9 +23,13 @@ const removeNotification = () => {
  * Allows components to create notifications
  * @param {Object} content - details about message to display
  * @param {Number} timeout - time in seconds to keep notification up
- *  default 5 seconds
  */
 export const setNotification = (content, timeout = 5 ) => {
+  /* Generate IDs for each notification to combat overlaps */
+  notifCount = notifCount + 1
+  const notifId = notifCount
+  content.notifCount = notifId
+
   /* thunk */
   return async (dispatch) => {
     const timeoutInMs = timeout * 1000
@@ -31,7 +39,7 @@ export const setNotification = (content, timeout = 5 ) => {
 
     /* Remove the notification and styling after a period of time */
     setTimeout(() => {
-      dispatch(removeNotification())
+      dispatch(removeNotification(notifId))
     }, timeoutInMs)
   }
 }
@@ -46,7 +54,11 @@ const notificationReducer = (state = initialState, action) => {
   case CREATE_NOTIFICATION:
     return action.content
   case REMOVE_NOTIFICATION:
-    return initialState
+    if(action.id === notifCount) {
+      return initialState
+    } else {
+      return state
+    }
   default:
     return state
   }

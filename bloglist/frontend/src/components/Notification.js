@@ -2,8 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 const Notification = ({ notification }) => {
-  console.log(notification)
-
   if (notification.message === null) {
     return null
   }
