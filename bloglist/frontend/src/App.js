@@ -14,6 +14,7 @@ import { useField, useResource } from './hooks/index'
 /* Temporary Redux import until separated into components */
 import { connect } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { likeBlog } from './reducers/blogsReducer'
 
 const App = (props) => {
   const ASCENDING = 'ascending'
@@ -243,7 +244,7 @@ const App = (props) => {
         </button>
         <Bloglist
           blogs={blogs} currentUserId={user.userId}
-          handleLike={handleLike}
+          // handleLike={handleLike}
           handleDelete={handleDelete}
         />
       </>
@@ -263,7 +264,9 @@ const App = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setNotification: (content, time) => dispatch(setNotification(content, time))
+    setNotification: (message, time) => {
+      dispatch(setNotification(message, time)) },
+    likeBlog: (blog) => dispatch(likeBlog(blog))
   }
 }
 

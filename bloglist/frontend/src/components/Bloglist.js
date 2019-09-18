@@ -1,16 +1,17 @@
 import React from 'react'
-
 import Blog from './Blog'
+import { connect } from 'react-redux'
+import { likeBlog } from '../reducers/blogsReducer'
 
-const Bloglist = ({ blogs, handleLike, handleDelete, currentUserId }) => {
+const Bloglist = ( props ) => {
 
-  const blogsList = () => blogs.map((blog) =>
+  const blogsList = () => props.blogs.map((blog) =>
     <Blog
       key={blog.id}
       blog={blog}
-      handleLike={() => handleLike(blog)}
-      handleDelete={() => handleDelete(blog)}
-      currentUserId={currentUserId}
+      handleLike={() => props.likeBlog(blog)}
+      handleDelete={() => props.handleDelete(blog)}
+      currentUserId={props.currentUserId}
     />
   )
 
@@ -21,4 +22,10 @@ const Bloglist = ({ blogs, handleLike, handleDelete, currentUserId }) => {
   )
 }
 
-export default Bloglist
+const mapDispatchToProps = (dispatch) => {
+  return {
+    likeBlog: obj => dispatch(likeBlog(obj)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Bloglist)
