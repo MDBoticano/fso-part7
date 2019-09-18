@@ -34,7 +34,6 @@ const deleteEntry = (objId) => {
   const config  = {
     headers: { Authorization: token }
   }
-
   const request = axios.delete(`${baseUrl}/${objId}`, config)
 
   console.log('Deleting entry at id', `${objId}`)

@@ -2,6 +2,7 @@ import blogService from '../services/blogs'
 
 const INITIALIZE_BLOGS = 'INITIALIZE_BLOGS'
 const NEW_BLOG = 'NEW_BLOG'
+const DELETE_BLOG = 'DELETE_BLOG'
 const LIKE_BLOG = 'LIKE_BLOG'
 
 export const initializeBlogs = () => {
@@ -21,6 +22,16 @@ export const createBlog = (content) => {
     dispatch({
       type: NEW_BLOG,
       data: newBlog,
+    })
+  }
+}
+
+export const deleteBlog = (id) => {
+  return async (dispatch) => {
+    const remainingBlogs = await blogService.deleteEntry(id)
+    dispatch({
+      type: DELETE_BLOG,
+      data: remainingBlogs
     })
   }
 }
@@ -47,6 +58,8 @@ const blogReducer = (state = [], action) => {
     return action.data
   case NEW_BLOG:
     return [...state, action.data]
+  case DELETE_BLOG:
+    return action.data
   case LIKE_BLOG:
     return state.map( blog => blog.id !== action.data.id ? blog : action.data )
   default:

@@ -14,7 +14,10 @@ import { useField, useResource } from './hooks/index'
 /* Temporary Redux import until separated into components */
 import { connect } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogsReducer'
 import { likeBlog } from './reducers/blogsReducer'
+
+import blogsService from './services/blogs'
 
 const App = (props) => {
   const ASCENDING = 'ascending'
@@ -72,9 +75,16 @@ const App = (props) => {
       const user = JSON.parse(loggedInUser)
       setUser(user)
       blogService.setToken(user.token)
+      blogsService.setToken(user.token)
     }
     //eslint-disable-next-line
   }, [])
+
+  /* Initialize blogs through Redux */
+  const initializeBlogsProp = props.initializeBlogs
+  useEffect( () => {
+    initializeBlogsProp()
+  }, [initializeBlogsProp])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -150,38 +160,38 @@ const App = (props) => {
     }
   }
 
-  const handleLike = async (blog) => {
-    const blogId = blog.id
+  // const handleLike = async (blog) => {
+  //   const blogId = blog.id
 
-    const blogObject = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      id: blogId
-    }
+  //   const blogObject = {
+  //     title: blog.title,
+  //     author: blog.author,
+  //     url: blog.url,
+  //     likes: blog.likes + 1,
+  //     id: blogId
+  //   }
 
-    try {
-      const updatedBlog = await blogService.update(blogId, blogObject)
-      const updatedBlogsList = blogs.map(entry => {
-        if (entry.id !== blogId) {
-          return entry
-        } else {
-          return updatedBlog
-        }
-      })
-      blogService.setValue(updatedBlogsList)
+  //   try {
+  //     const updatedBlog = await blogService.update(blogId, blogObject)
+  //     const updatedBlogsList = blogs.map(entry => {
+  //       if (entry.id !== blogId) {
+  //         return entry
+  //       } else {
+  //         return updatedBlog
+  //       }
+  //     })
+  //     blogService.setValue(updatedBlogsList)
 
-      // to sort blogs after updating:
-      // setBlogs(sortBlogs(updatedBlogsList, sortDirection))
+  //     // to sort blogs after updating:
+  //     // setBlogs(sortBlogs(updatedBlogsList, sortDirection))
 
-    } catch (error) {
-      props.setNotification({
-        message:'Failed to like blog',
-        messageStyle: 'error'
-      })
-    }
-  }
+  //   } catch (error) {
+  //     props.setNotification({
+  //       message:'Failed to like blog',
+  //       messageStyle: 'error'
+  //     })
+  //   }
+  // }
 
   const handleDelete = async (blog) => {
     const blogId = blog.id
@@ -266,6 +276,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setNotification: (message, time) => {
       dispatch(setNotification(message, time)) },
+    initializeBlogs: () => dispatch(initializeBlogs()),
     likeBlog: (blog) => dispatch(likeBlog(blog))
   }
 }
