@@ -21,8 +21,9 @@ const App = () => {
   const formAuthor = useField('text')
   const formUrl = useField('text')
 
-  const [errorMessage, setErrorMessage] = useState(null)
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [notifType, setNotifType] = useState(null)
+
   const [user, setUser] = useState(null)
 
   const loginUsername = useField('text')
@@ -82,9 +83,11 @@ const App = () => {
       loginUsername.reset()
       loginPassword.reset()
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setNotification('Wrong credentials')
+      setNotifType('error')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
+        setNotifType(null)
       }, 5000)
     }
   }
@@ -112,21 +115,26 @@ const App = () => {
       blogService.setValue(sortBlogs(updatedBlogsList, sortDirection))
 
       if (formAuthor.value) {
-        setSuccessMessage(`Added blog ${formTitle.value} by ${formAuthor.value}`)
+        setNotification(`Added blog ${formTitle.value} by ${formAuthor.value}`)
+        setNotifType('success')
       } else {
-        setSuccessMessage(`Added blog ${formTitle.value}`)
+        setNotification(`Added blog ${formTitle.value}`)
+        setNotifType('success')
       }
       setTimeout(() => {
-        setSuccessMessage(null)
+        setNotification(null)
+        setNotifType(null)
       }, 5000)
 
       formTitle.reset()
       formAuthor.reset()
       formUrl.reset()
     } catch (error) {
-      setErrorMessage('Failed to add blog')
+      setNotification('Failed to add blog')
+      setNotifType('error')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
+        setNotifType(null)
       }, 5000)
     }
   }
@@ -157,9 +165,11 @@ const App = () => {
       // setBlogs(sortBlogs(updatedBlogsList, sortDirection))
 
     } catch (error) {
-      setErrorMessage('Failed to like blog')
+      setNotification('Failed to add blog')
+      setNotifType('error')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
+        setNotification(null)
       }, 5000)
     }
   }
@@ -173,9 +183,11 @@ const App = () => {
         blogService.setValue(updatedBlogsList)
       }
     } catch (error) {
-      setErrorMessage('Failed to delete blog')
+      setNotification('Failed to delete blog')
+      setNotifType('error')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
+        setNotifType(null)
       }, 5000)
     }
   }
@@ -235,8 +247,7 @@ const App = () => {
   return (
     <div className="App">
       <h1 id="page-title">Blogs</h1>
-      <Notification message={errorMessage} messageType='error' />
-      <Notification message={successMessage} messageType='success' />
+      <Notification message={notification} messageType={notifType} />
       {user === null && loginForm()}
       {user !== null && blogsView()}
     </div>
