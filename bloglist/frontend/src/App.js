@@ -14,7 +14,7 @@ import { useField, useResource } from './hooks/index'
 /* Temporary Redux import until separated into components */
 import { connect } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogsReducer'
+import { initializeBlogs, createBlog } from './reducers/blogsReducer'
 import { likeBlog } from './reducers/blogsReducer'
 
 import blogsService from './services/blogs'
@@ -42,31 +42,26 @@ const App = (props) => {
 
   const [sortDirection, setSortDirection] = useState(DESCENDING)
 
-  const sortBlogs = (blogsArray, direction = DESCENDING) => {
-    const blogsArrayCopy = [...blogsArray]
-    if (direction === ASCENDING) {
-      blogsArrayCopy.sort((a, b) => a.likes - b.likes)
-    }
-    else if (direction === DESCENDING) {
-      blogsArrayCopy.sort((a, b) => b.likes - a.likes)
-    }
-    return blogsArrayCopy
-  }
+  /* Initialize blogs through Redux */
+  const initializeBlogsProp = props.initializeBlogs
+  useEffect( () => {
+    initializeBlogsProp()
+  }, [initializeBlogsProp])
 
   /* useEffect hooks */
   // Get the blogs from the server
   // blogsLen also triggers a few fetch after creating a new blog
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      const initialBlogs = await blogService.getAll()
+  // useEffect(() => {
+  //   const fetchBlogs = async () => {
+  //     const initialBlogs = await blogService.getAll()
 
-      // Load blogs sorted (descending by default)
-      const sortedBlogs = sortBlogs(initialBlogs, sortDirection)
-      blogService.setValue(sortedBlogs)
-    }
-    fetchBlogs()
-    //eslint-disable-next-line
-  }, [sortDirection, blogsLen])
+  //     // Load blogs sorted (descending by default)
+  //     const sortedBlogs = sortBlogs(initialBlogs, sortDirection)
+  //     blogService.setValue(sortedBlogs)
+  //   }
+  //   fetchBlogs()
+  //   //eslint-disable-next-line
+  // }, [sortDirection, blogsLen])
 
   // Check for logged in user
   useEffect(() => {
@@ -78,13 +73,7 @@ const App = (props) => {
       blogsService.setToken(user.token)
     }
     //eslint-disable-next-line
-  }, [])
-
-  /* Initialize blogs through Redux */
-  const initializeBlogsProp = props.initializeBlogs
-  useEffect( () => {
-    initializeBlogsProp()
-  }, [initializeBlogsProp])
+  }, [])  
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -131,10 +120,11 @@ const App = (props) => {
     }
 
     try {
-      const newBlog = await blogService.create(blogObject)
-      const updatedBlogsList = blogs.concat(newBlog)
+      // const newBlog = await blogService.create(blogObject)
+      // const updatedBlogsList = blogs.concat(newBlog)
+      await props.createBlog(blogObject)
 
-      blogService.setValue(sortBlogs(updatedBlogsList, sortDirection))
+      // blogService.setValue(sortBlogs(updatedBlogsList, sortDirection))
 
       if (formAuthor.value) {
         props.setNotification({
@@ -193,21 +183,21 @@ const App = (props) => {
   //   }
   // }
 
-  const handleDelete = async (blog) => {
-    const blogId = blog.id
+  // const handleDelete = async (blog) => {
+  //   const blogId = blog.id
 
-    try {
-      if (window.confirm(`Do you want to delete ${blog.title}`)) {
-        const updatedBlogsList = await blogService.deleteEntry(blogId)
-        blogService.setValue(updatedBlogsList)
-      }
-    } catch (error) {
-      props.setNotification({
-        message:'Failed to delete blog',
-        messageStyle: 'error'
-      })
-    }
-  }
+  //   try {
+  //     if (window.confirm(`Do you want to delete ${blog.title}`)) {
+  //       const updatedBlogsList = await blogService.deleteEntry(blogId)
+  //       blogService.setValue(updatedBlogsList)
+  //     }
+  //   } catch (error) {
+  //     props.setNotification({
+  //       message:'Failed to delete blog',
+  //       messageStyle: 'error'
+  //     })
+  //   }
+  // }
 
   const listSortToggle = () => {
     if (sortDirection === ASCENDING) { setSortDirection(DESCENDING) }
@@ -255,7 +245,7 @@ const App = (props) => {
         <Bloglist
           blogs={blogs} currentUserId={user.userId}
           // handleLike={handleLike}
-          handleDelete={handleDelete}
+          // handleDelete={handleDelete}
         />
       </>
     )
@@ -277,6 +267,7 @@ const mapDispatchToProps = (dispatch) => {
     setNotification: (message, time) => {
       dispatch(setNotification(message, time)) },
     initializeBlogs: () => dispatch(initializeBlogs()),
+    createBlog: (blog) => dispatch(createBlog(blog)),
     likeBlog: (blog) => dispatch(likeBlog(blog))
   }
 }
