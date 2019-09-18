@@ -10,7 +10,12 @@ import loginService from './services/login'
 
 import { useField, useResource } from './hooks/index'
 
-const App = () => {
+
+/* Temporary Redux import until separated into components */
+import { connect } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
+
+const App = (props) => {
   const ASCENDING = 'ascending'
   const DESCENDING = 'descending'
 
@@ -22,8 +27,9 @@ const App = () => {
   const formAuthor = useField('text')
   const formUrl = useField('text')
 
-  const [notification, setNotification] = useState(null)
-  const [notifType, setNotifType] = useState(null)
+  /* Notifications state values: moved to Redux */
+  // const [notification, setNotification] = useState(null)
+  // const [notifType, setNotifType] = useState(null)
 
   const [user, setUser] = useState(null)
 
@@ -82,15 +88,18 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
 
+      props.setNotification({
+        message: `welcome ${username}`,
+        messageStyle: 'success',
+      })
+
       loginUsername.reset()
       loginPassword.reset()
     } catch (exception) {
-      setNotification('Wrong credentials')
-      setNotifType('error')
-      setTimeout(() => {
-        setNotification(null)
-        setNotifType(null)
-      }, 5000)
+      props.setNotification({
+        message: 'incorrect login',
+        messageStyle: 'error',
+      })
     }
   }
 
@@ -117,28 +126,26 @@ const App = () => {
       blogService.setValue(sortBlogs(updatedBlogsList, sortDirection))
 
       if (formAuthor.value) {
-        setNotification(`Added blog ${formTitle.value} by ${formAuthor.value}`)
-        setNotifType('success')
+        props.setNotification({
+          message: `Added blog ${formTitle.value} by ${formAuthor.value}`,
+          messageStyle: 'success',
+        })
       } else {
-        setNotification(`Added blog ${formTitle.value}`)
-        setNotifType('success')
+        props.setNotification({
+          message: `Added blog ${formTitle.value}`,
+          messageStyle: 'success'
+        })
       }
-      setTimeout(() => {
-        setNotification(null)
-        setNotifType(null)
-      }, 5000)
 
       formTitle.reset()
       formAuthor.reset()
       formUrl.reset()
       setBlogsLen(blogsLen + 1)
     } catch (error) {
-      setNotification('Failed to add blog')
-      setNotifType('error')
-      setTimeout(() => {
-        setNotification(null)
-        setNotifType(null)
-      }, 5000)
+      props.setNotification({
+        message:'Failed to add blog',
+        messageStyle: 'error'
+      })
     }
   }
 
@@ -168,12 +175,10 @@ const App = () => {
       // setBlogs(sortBlogs(updatedBlogsList, sortDirection))
 
     } catch (error) {
-      setNotification('Failed to add blog')
-      setNotifType('error')
-      setTimeout(() => {
-        setNotification(null)
-        setNotification(null)
-      }, 5000)
+      props.setNotification({
+        message:'Failed to like blog',
+        messageStyle: 'error'
+      })
     }
   }
 
@@ -186,12 +191,10 @@ const App = () => {
         blogService.setValue(updatedBlogsList)
       }
     } catch (error) {
-      setNotification('Failed to delete blog')
-      setNotifType('error')
-      setTimeout(() => {
-        setNotification(null)
-        setNotifType(null)
-      }, 5000)
+      props.setNotification({
+        message:'Failed to delete blog',
+        messageStyle: 'error'
+      })
     }
   }
 
@@ -250,11 +253,18 @@ const App = () => {
   return (
     <div className="App">
       <h1 id="page-title">Blogs</h1>
-      <Notification message={notification} messageType={notifType} />
+      {/* <Notification message={notification} messageType={notifType} /> */}
+      <Notification />
       {user === null && loginForm()}
       {user !== null && blogsView()}
     </div>
   )
 }
 
-export default App
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setNotification: (content, time) => dispatch(setNotification(content, time))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(App)
