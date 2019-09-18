@@ -1,5 +1,4 @@
-// import loginService from '../services/login'
-// import blogService from '../services/blogs'
+import blogService from '../services/blogs'
 
 const initialState = {
   username: '',
@@ -11,6 +10,15 @@ export const setUser = (user) => {
   return {
     type: 'SET_USER',
     data: user
+  }
+}
+
+export const setToken = (token) => {
+  return async (dispatch) => {
+    await blogService.setToken(token)
+    dispatch({
+      type: 'SET_TOKEN',
+    })
   }
 }
 
@@ -30,6 +38,8 @@ const loginReducer = (state = initialState, action) => {
       userId: action.data.userId,
       token: action.data.token,
     }
+  case 'SET_TOKEN':
+    return state
   case 'LOGOUT':
     return initialState
   default:

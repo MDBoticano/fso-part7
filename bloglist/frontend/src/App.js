@@ -12,8 +12,7 @@ import { useField } from './hooks/index'
 import { connect } from 'react-redux'
 import { setUser, logout, setToken } from './reducers/loginReducer'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog,likeBlog } from './reducers/blogsReducer'
-import blogsService from './services/blogs'
+import { initializeBlogs, createBlog, likeBlog } from './reducers/blogsReducer'
 
 const App = (props) => {
   const ASCENDING = 'ascending'
@@ -41,7 +40,7 @@ const App = (props) => {
     if (loggedInUser) {
       const user = JSON.parse(loggedInUser)
       props.setUser(user)
-      blogsService.setToken(user.token)
+      props.setToken(user.token)
     }
     //eslint-disable-next-line
   }, [])  
@@ -56,12 +55,11 @@ const App = (props) => {
       })
 
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
-      blogsService.setToken(user.token)
-      console.log(user)
       props.setUser(user)
+      props.setToken(user.token)
 
       props.setNotification({
-        message: `welcome ${props.username}`,
+        message: `welcome ${user.username}`,
         messageStyle: 'success',
       })
 
@@ -189,6 +187,7 @@ const mapDispatchToProps = (dispatch) => {
     logout: () => dispatch(logout()),
     setNotification: (message, time) => {
       dispatch(setNotification(message, time)) },
+    setToken: (token) => { dispatch(setToken(token))},
     initializeBlogs: () => dispatch(initializeBlogs()),
     createBlog: (blog) => dispatch(createBlog(blog)),
     likeBlog: (blog) => dispatch(likeBlog(blog))
