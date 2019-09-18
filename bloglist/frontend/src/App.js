@@ -16,6 +16,7 @@ const App = () => {
 
   /* State values */
   const [blogs, blogService] = useResource('/api/blogs')
+  const [blogsLen, setBlogsLen] = useState(-1)
 
   const formTitle = useField('text')
   const formAuthor = useField('text')
@@ -44,8 +45,9 @@ const App = () => {
 
   /* useEffect hooks */
   // Get the blogs from the server
+  // blogsLen also triggers a few fetch after creating a new blog
   useEffect(() => {
-    async function fetchBlogs() {
+    const fetchBlogs = async () => {
       const initialBlogs = await blogService.getAll()
 
       // Load blogs sorted (descending by default)
@@ -54,7 +56,7 @@ const App = () => {
     }
     fetchBlogs()
     //eslint-disable-next-line
-  }, [sortDirection])
+  }, [sortDirection, blogsLen])
 
   // Check for logged in user
   useEffect(() => {
@@ -129,6 +131,7 @@ const App = () => {
       formTitle.reset()
       formAuthor.reset()
       formUrl.reset()
+      setBlogsLen(blogsLen + 1)
     } catch (error) {
       setNotification('Failed to add blog')
       setNotifType('error')
