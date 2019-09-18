@@ -7,16 +7,12 @@ import Bloglist from './components/Bloglist'
 import CreateBlog from './components/CreateBlog'
 
 import loginService from './services/login'
+import { useField } from './hooks/index'
 
-import { useField, useResource } from './hooks/index'
-
-
-/* Temporary Redux import until separated into components */
 import { connect } from 'react-redux'
+import { setUser, logout, setToken } from './reducers/loginReducer'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogsReducer'
-import { likeBlog } from './reducers/blogsReducer'
-
+import { initializeBlogs, createBlog,likeBlog } from './reducers/blogsReducer'
 import blogsService from './services/blogs'
 
 const App = (props) => {
@@ -24,18 +20,9 @@ const App = (props) => {
   const DESCENDING = 'descending'
 
   /* State values */
-  const [blogs, blogService] = useResource('/api/blogs')
-  const [blogsLen, setBlogsLen] = useState(-1)
-
   const formTitle = useField('text')
   const formAuthor = useField('text')
   const formUrl = useField('text')
-
-  /* Notifications state values: moved to Redux */
-  // const [notification, setNotification] = useState(null)
-  // const [notifType, setNotifType] = useState(null)
-
-  const [user, setUser] = useState(null)
 
   const loginUsername = useField('text')
   const loginPassword = useField('password')
@@ -48,28 +35,12 @@ const App = (props) => {
     initializeBlogsProp()
   }, [initializeBlogsProp])
 
-  /* useEffect hooks */
-  // Get the blogs from the server
-  // blogsLen also triggers a few fetch after creating a new blog
-  // useEffect(() => {
-  //   const fetchBlogs = async () => {
-  //     const initialBlogs = await blogService.getAll()
-
-  //     // Load blogs sorted (descending by default)
-  //     const sortedBlogs = sortBlogs(initialBlogs, sortDirection)
-  //     blogService.setValue(sortedBlogs)
-  //   }
-  //   fetchBlogs()
-  //   //eslint-disable-next-line
-  // }, [sortDirection, blogsLen])
-
   // Check for logged in user
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('loggedBlogUser')
     if (loggedInUser) {
       const user = JSON.parse(loggedInUser)
-      setUser(user)
-      blogService.setToken(user.token)
+      props.setUser(user)
       blogsService.setToken(user.token)
     }
     //eslint-disable-next-line
@@ -85,11 +56,12 @@ const App = (props) => {
       })
 
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
+      blogsService.setToken(user.token)
+      console.log(user)
+      props.setUser(user)
 
       props.setNotification({
-        message: `welcome ${username}`,
+        message: `welcome ${props.username}`,
         messageStyle: 'success',
       })
 
@@ -106,7 +78,7 @@ const App = (props) => {
   const handleLogout = (event) => {
     event.preventDefault()
     window.localStorage.removeItem('loggedBlogUser')
-    setUser(null)
+    props.logout()
   }
 
   const addBlog = async (event) => {
@@ -116,15 +88,11 @@ const App = (props) => {
       title: formTitle.value,
       author: formAuthor.value,
       url: formUrl.value,
-      userId: user.userId
+      userId: props.userId
     }
 
     try {
-      // const newBlog = await blogService.create(blogObject)
-      // const updatedBlogsList = blogs.concat(newBlog)
       await props.createBlog(blogObject)
-
-      // blogService.setValue(sortBlogs(updatedBlogsList, sortDirection))
 
       if (formAuthor.value) {
         props.setNotification({
@@ -137,11 +105,9 @@ const App = (props) => {
           messageStyle: 'success'
         })
       }
-
       formTitle.reset()
       formAuthor.reset()
       formUrl.reset()
-      setBlogsLen(blogsLen + 1)
     } catch (error) {
       props.setNotification({
         message:'Failed to add blog',
@@ -149,55 +115,6 @@ const App = (props) => {
       })
     }
   }
-
-  // const handleLike = async (blog) => {
-  //   const blogId = blog.id
-
-  //   const blogObject = {
-  //     title: blog.title,
-  //     author: blog.author,
-  //     url: blog.url,
-  //     likes: blog.likes + 1,
-  //     id: blogId
-  //   }
-
-  //   try {
-  //     const updatedBlog = await blogService.update(blogId, blogObject)
-  //     const updatedBlogsList = blogs.map(entry => {
-  //       if (entry.id !== blogId) {
-  //         return entry
-  //       } else {
-  //         return updatedBlog
-  //       }
-  //     })
-  //     blogService.setValue(updatedBlogsList)
-
-  //     // to sort blogs after updating:
-  //     // setBlogs(sortBlogs(updatedBlogsList, sortDirection))
-
-  //   } catch (error) {
-  //     props.setNotification({
-  //       message:'Failed to like blog',
-  //       messageStyle: 'error'
-  //     })
-  //   }
-  // }
-
-  // const handleDelete = async (blog) => {
-  //   const blogId = blog.id
-
-  //   try {
-  //     if (window.confirm(`Do you want to delete ${blog.title}`)) {
-  //       const updatedBlogsList = await blogService.deleteEntry(blogId)
-  //       blogService.setValue(updatedBlogsList)
-  //     }
-  //   } catch (error) {
-  //     props.setNotification({
-  //       message:'Failed to delete blog',
-  //       messageStyle: 'error'
-  //     })
-  //   }
-  // }
 
   const listSortToggle = () => {
     if (sortDirection === ASCENDING) { setSortDirection(DESCENDING) }
@@ -227,7 +144,7 @@ const App = (props) => {
   const blogsView = () => {
     return (
       <>
-        <p className="logged-user">{user.name} is logged in</p>
+        <p className="logged-user">{props.name} is logged in</p>
         <button id="logout" onClick={handleLogout}>logout</button>
         <div id="blog-create-toggleable">
           <Toggleable buttonLabel="new blog" ref={blogFormRef}>
@@ -242,11 +159,7 @@ const App = (props) => {
         <button id="toggle-bloglist-sort" onClick={listSortToggle}>
           Sort by # of likes: {sortDirection}
         </button>
-        <Bloglist
-          blogs={blogs} currentUserId={user.userId}
-          // handleLike={handleLike}
-          // handleDelete={handleDelete}
-        />
+        <Bloglist />
       </>
     )
   }
@@ -254,16 +167,26 @@ const App = (props) => {
   return (
     <div className="App">
       <h1 id="page-title">Blogs</h1>
-      {/* <Notification message={notification} messageType={notifType} /> */}
       <Notification />
-      {user === null && loginForm()}
-      {user !== null && blogsView()}
+      {props.username === '' && loginForm()}
+      {props.username !== '' && blogsView()}
     </div>
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    username: state.login.username,
+    name: state.login.name,
+    userId: state.login.userId,
+    token: state.login.token,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
+    setUser: (user) => dispatch(setUser(user)),
+    logout: () => dispatch(logout()),
     setNotification: (message, time) => {
       dispatch(setNotification(message, time)) },
     initializeBlogs: () => dispatch(initializeBlogs()),
@@ -272,4 +195,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

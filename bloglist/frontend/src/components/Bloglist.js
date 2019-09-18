@@ -51,7 +51,8 @@ const Bloglist = ( props ) => {
 
 const mapStateToProps = (state) => {
   return {
-    sortedBlogs: sortBlogs(state.blogs)
+    sortedBlogs: sortBlogs(state.blogs),
+    currentUserId: state.login.userId,
   }
 }
 
