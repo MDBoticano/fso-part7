@@ -177,7 +177,6 @@ const mapStateToProps = (state) => {
     username: state.login.username,
     name: state.login.name,
     userId: state.login.userId,
-    token: state.login.token,
   }
 }
 
