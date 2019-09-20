@@ -29,7 +29,7 @@ test('onClick works', () => {
   )
 
   const button = getByText('like')
-  
+
   fireEvent.click(button)
   expect(mockHandler.mock.calls.length).toBe(1)
 

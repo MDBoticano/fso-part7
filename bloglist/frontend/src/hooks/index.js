@@ -8,8 +8,8 @@ export const useField = (type) => {
     setValue(event.target.value)
   }
 
-  const reset = () => {  
-    return setValue('')     
+  const reset = () => {
+    return setValue('')
   }
 
   return {
@@ -23,7 +23,7 @@ export const useField = (type) => {
 let token = null
 
 export const useResource = (baseUrl) => {
-  const [value, setValue ] = useState([])
+  const [value, setValue] = useState([])
 
   const setToken = (newToken) => {
     token = `bearer ${newToken}`
@@ -59,5 +59,5 @@ export const useResource = (baseUrl) => {
     })
   }
 
-  return [ value , { getAll, create, update, deleteEntry, setToken, setValue } ]
+  return [value, { getAll, create, update, deleteEntry, setToken, setValue }]
 }

@@ -22,7 +22,7 @@ const blogs = [
   }
 ]
 
-let token = null;
+let token = null
 
 const getAll = () => {
   // console.log('User logged in: returning blogs')

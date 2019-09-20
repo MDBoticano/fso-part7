@@ -61,7 +61,7 @@ const mapDispatchToProps = (dispatch) => {
     likeBlog: obj => dispatch(likeBlog(obj)),
     deleteBlog: id => dispatch(deleteBlog(id)),
     setNotification: (message, time) => {
-      dispatch(setNotification(message, time)) }, 
+      dispatch(setNotification(message, time)) },
   }
 }
 

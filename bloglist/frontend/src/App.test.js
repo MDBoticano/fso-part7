@@ -13,13 +13,13 @@ describe('<App />', () => {
     /* Waits for the login button to show */
     await waitForElement(
       // () => component.container.querySelector('.toggleable--hide-btn')
-      
+
       // Suggested check to wait for data to load
       // () => component.getByText('login')
 
       // Alternative: wait for login form to be in DOM (but hidden)
       () => component.container.querySelector('#loginForm')
-    ) 
+    )
 
     // If there's no user logged in (default), Only display login form
     const loginForm = component.container.querySelector('#loginForm')
@@ -27,7 +27,7 @@ describe('<App />', () => {
 
     // There should be zero blogs
     const blogs = component.container.querySelectorAll('.blog-entry')
-    expect(blogs.length).toBe(0)    
+    expect(blogs.length).toBe(0)
   })
 
   test('if a logged in user exists, return blogs', async () => {
@@ -49,7 +49,7 @@ describe('<App />', () => {
     await waitForElement(
       () => component.container.querySelector('#bloglist')
     )
-    
+
     // There should now be blogs
     const blogsAfterLogin = component.container.querySelectorAll('.blog-entry')
     expect(blogsAfterLogin.length).toBe(3)

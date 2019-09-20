@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
-const blog = { 
+const blog = {
   author: 'Dan Manny',
   title: 'The Homepage of the Internet',
   url: 'https://google.com',
@@ -23,7 +23,7 @@ test('Title & Author only shown by default', () => {
   // expect(component.container).toHaveTextContent('https://google.com')
 })
 
-test('Clicking button shows details (URL & likes)', () => {  
+test('Clicking button shows details (URL & likes)', () => {
   const component = render(<Blog blog={blog} />)
 
   const button = component.container.querySelector('.blog-summary')
