@@ -1,10 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 const User = (props) => {
 
   const createBloglist = (blogs) => {
-    console.log(blogs)
     return (
       <ul>
         {createListItems(blogs)}
@@ -16,7 +15,8 @@ const User = (props) => {
     return blogs.map( blog => {
       return (
         <li key={blog.id} style={{ padding: 5 }}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          {/* <Link to={`/blogs/${blog.id}`}>{blog.title}</Link> */}
+          {blog.title}
         </li>
       )
     })

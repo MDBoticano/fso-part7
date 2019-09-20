@@ -4,6 +4,7 @@ import Toggleable from './components/Toggleable'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Bloglist from './components/Bloglist'
+import BlogView from './components/BlogView'
 import CreateBlog from './components/CreateBlog'
 import UsersInfo from './components/UsersInfo'
 import User from './components/User'
@@ -137,6 +138,10 @@ const App = (props) => {
     return getBlogsFromUser(props.bloglist, id)
   }
 
+  const getBlogById = (id) => {
+    return props.bloglist.find( blog => blog.id === id)
+  }
+
   const loginForm = () => {
     return (
       <Toggleable buttonLabel="login">
@@ -201,6 +206,9 @@ const App = (props) => {
         <Route exact path="/users" render={() => <UsersInfo />} />
         <Route exact path="/users/:id" render={({ match }) =>
           <User user={getUserById(match.params.id)} /> }
+        />
+        <Route exact path="/blogs/:id" render={({ match }) =>
+          <BlogView blog={getBlogById(match.params.id)} /> }
         />
       </Router>
     </div>
