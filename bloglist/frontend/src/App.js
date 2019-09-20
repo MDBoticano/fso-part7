@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Bloglist from './components/Bloglist'
 import CreateBlog from './components/CreateBlog'
+import UsersInfo from './components/Users'
 
 import loginService from './services/login'
 import { useField } from './hooks/index'
@@ -164,6 +165,7 @@ const App = (props) => {
 
   return (
     <div className="App">
+      <UsersInfo />
       <h1 id="page-title">Blogs</h1>
       <Notification />
       {props.username === '' && loginForm()}
