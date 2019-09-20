@@ -5,6 +5,7 @@ Content-Type: application/json
   "title": "My Thursday",
   "author": "Mark",
   "url": "www.marloboticano.com",
-  "likes": 228,
+  "likes": 229,
   "id": "5d5604df658de14b94d372d3",
+  "comments": ["hello"]
 }

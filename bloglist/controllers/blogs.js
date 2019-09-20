@@ -22,7 +22,7 @@ blogsRouter.get('/:id', async (request, response, next) => {
     } else {
       response.status(404).end()
     }
-  } catch(exception) {
+  } catch (exception) {
     next(exception)
   }
 })
@@ -33,11 +33,11 @@ blogsRouter.post('/', async (request, response, next) => {
 
   try {
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    
+
     if (!request.token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
-  
+
     const user = await User.findById(body.userId)
 
     // validate who the token belongs to, not just that its valid
@@ -49,10 +49,11 @@ blogsRouter.post('/', async (request, response, next) => {
       title: body.title,
       author: body.author,
       url: body.url,
+      comments: body.comments,
       likes: body.likes === undefined ? 0 : body.likes,
       user: user._id
     })
-  
+
     const savedBlog = await blog.save()
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
@@ -70,12 +71,14 @@ blogsRouter.put('/:id', async (request, response, next) => {
     const blog = {
       title: body.title,
       author: body.author,
-      likes: body.likes
+      likes: body.likes,
+      comments: body.comments,
     }
 
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true})
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog,
+      { new: true })
     response.json(updatedBlog.toJSON())
-  } catch(exception) {
+  } catch (exception) {
     next(exception)
   }
 })
@@ -85,11 +88,11 @@ blogsRouter.delete('/:id', async (request, response, next) => {
   try {
     // get the token from the request
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    
+
     if (!request.token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
-  
+
     // get blog from id
     const blogToDelete = await Blog.findById(request.params.id)
 
@@ -98,7 +101,7 @@ blogsRouter.delete('/:id', async (request, response, next) => {
     // validate who the token belongs to, not just that its valid
     if (decodedToken.id.toString() !== blogToDelete.user.toString()) {
       return response.status(401).json({ error: 'token doesn\'t match user' })
-    } 
+    }
 
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()

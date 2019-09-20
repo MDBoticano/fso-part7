@@ -1,20 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
+import { deleteBlog, likeBlog, addComment } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const BlogView = ( props ) => {
+const BlogView = (props) => {
+  const [formComment, setFormComment] = useState('')
+
   const deleteHandler = (blog, blogId) => {
     try {
       if (window.confirm(`Do you want to delete ${blog.title}`)) {
         props.deleteBlog(blogId)
         props.setNotification({
           message: `Successfully deleted '${blog.title}'`,
-          messageStyle: 'success' })
+          messageStyle: 'success'
+        })
       }
     } catch (error) {
       props.setNotification({
-        message:'Failed to delete blog',
+        message: 'Failed to delete blog',
         messageStyle: 'error'
       })
     }
@@ -82,23 +85,45 @@ const BlogView = ( props ) => {
 
   const commentAdder = () => {
     return (
-      <form onSubmit={addComment}>
-        <input type="text" />
+      <form onSubmit={submitComment}>
+        <input type="text" value={formComment} onChange={handleForm} />
         <button type="submit">Add Comment</button>
       </form>
     )
   }
 
-  const addComment = (event) => {
+  const handleForm = (event) => {
+    setFormComment(event.target.value)
+  }
+
+  const submitComment = async (event) => {
     event.preventDefault()
-    return
+
+    try {
+      await props.addComment(props.blog, formComment)
+      props.setNotification({
+        message: 'successfully added comment',
+        messageStyle: 'success',
+      })
+      setFormComment('')
+    } catch (error) {
+      props.setNotification({
+        message: 'Failed to add comment',
+        messageStyle: 'error'
+      })
+    }
   }
 
   const listComments = (blog) => {
     if (!blog.comments) { return }
-    blog.comments.map( (comment, i) => {
-      return <li key={i}>{comment}</li>
-    })
+
+    return (
+      <ul>
+        {blog.comments.map((comment, i) => {
+          return <li key={i}>{comment}</li>
+        })}
+      </ul>
+    )
   }
 
   if (!props.blog) { return null }
@@ -127,8 +152,10 @@ const mapDispatchToProps = (dispatch) => {
     likeBlog: obj => dispatch(likeBlog(obj)),
     deleteBlog: id => dispatch(deleteBlog(id)),
     setNotification: (message, time) => {
-      dispatch(setNotification(message, time)) }, 
+      dispatch(setNotification(message, time))
+    },
+    addComment: (blog, comment) => dispatch(addComment(blog, comment)),
   }
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )(BlogView)
+export default connect(mapStateToProps, mapDispatchToProps)(BlogView)
