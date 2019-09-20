@@ -5,10 +5,12 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Bloglist from './components/Bloglist'
 import CreateBlog from './components/CreateBlog'
-import UsersInfo from './components/Users'
+import UsersInfo from './components/UsersInfo'
+import User from './components/User'
 
 import loginService from './services/login'
 import { useField } from './hooks/index'
+import { getBlogsFromUser } from './utils/Blog_helper'
 
 import { connect } from 'react-redux'
 import { setUser, logout, setToken } from './reducers/loginReducer'
@@ -131,6 +133,10 @@ const App = (props) => {
     return restOfProps
   }
 
+  const getUserById = (id) => {
+    return getBlogsFromUser(props.bloglist, id)
+  }
+
   const loginForm = () => {
     return (
       <Toggleable buttonLabel="login">
@@ -186,13 +192,16 @@ const App = (props) => {
 
         <h1 id="page-title">Blogs</h1>
         <Notification />
-        
+
         {props.username === '' && loginForm()}
         {props.username !== '' && loggedInUser()}
         <Route exact path="/" render={() => {
           return props.username !== '' && blogsView()
         }} />
-        <Route path="/users" render={() => <UsersInfo />} />
+        <Route exact path="/users" render={() => <UsersInfo />} />
+        <Route exact path="/users/:id" render={({ match }) =>
+          <User user={getUserById(match.params.id)} /> }
+        />
       </Router>
     </div>
   )
@@ -203,6 +212,7 @@ const mapStateToProps = (state) => {
     username: state.login.username,
     name: state.login.name,
     userId: state.login.userId,
+    bloglist: state.blogs,
   }
 }
 
