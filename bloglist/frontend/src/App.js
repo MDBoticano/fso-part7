@@ -15,6 +15,11 @@ import { setUser, logout, setToken } from './reducers/loginReducer'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog } from './reducers/blogsReducer'
 
+import {
+  BrowserRouter as Router,
+  Route, Link, Redirect, withRouter
+} from 'react-router-dom'
+
 const App = (props) => {
   const ASCENDING = 'ascending'
   const DESCENDING = 'descending'
@@ -31,7 +36,7 @@ const App = (props) => {
 
   /* Initialize blogs through Redux */
   const initializeBlogsProp = props.initializeBlogs
-  useEffect( () => {
+  useEffect(() => {
     initializeBlogsProp()
   }, [initializeBlogsProp])
 
@@ -44,7 +49,7 @@ const App = (props) => {
       props.setToken(user.token)
     }
     //eslint-disable-next-line
-  }, [])  
+  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -109,7 +114,7 @@ const App = (props) => {
       formUrl.reset()
     } catch (error) {
       props.setNotification({
-        message:'Failed to add blog',
+        message: 'Failed to add blog',
         messageStyle: 'error'
       })
     }
@@ -138,13 +143,20 @@ const App = (props) => {
     )
   }
 
+  const loggedInUser = () => {
+    return (
+      <>
+        <p className="logged-user">{props.name} is logged in</p>
+        <button id="logout" onClick={handleLogout}>logout</button>
+      </>
+    )
+  }
+
   const blogFormRef = React.createRef()
 
   const blogsView = () => {
     return (
       <>
-        <p className="logged-user">{props.name} is logged in</p>
-        <button id="logout" onClick={handleLogout}>logout</button>
         <div id="blog-create-toggleable">
           <Toggleable buttonLabel="new blog" ref={blogFormRef}>
             <CreateBlog
@@ -165,11 +177,23 @@ const App = (props) => {
 
   return (
     <div className="App">
-      <h1 id="page-title">Blogs</h1>
-      <Notification />
-      {props.username === '' && loginForm()}
-      {props.username !== '' && blogsView()}
-      <UsersInfo />
+
+      <Router>
+        <div className="router-nav">
+          <Link to="/" style={{ padding: 5 }}>Home</Link>
+          <Link to="/users" style={{ padding: 5 }}>Users</Link>
+        </div>
+
+        <h1 id="page-title">Blogs</h1>
+        <Notification />
+        
+        {props.username === '' && loginForm()}
+        {props.username !== '' && loggedInUser()}
+        <Route exact path="/" render={() => {
+          return props.username !== '' && blogsView()
+        }} />
+        <Route path="/users" render={() => <UsersInfo />} />
+      </Router>
     </div>
   )
 }
@@ -187,8 +211,9 @@ const mapDispatchToProps = (dispatch) => {
     setUser: (user) => dispatch(setUser(user)),
     logout: () => dispatch(logout()),
     setNotification: (message, time) => {
-      dispatch(setNotification(message, time)) },
-    setToken: (token) => { dispatch(setToken(token))},
+      dispatch(setNotification(message, time))
+    },
+    setToken: (token) => { dispatch(setToken(token)) },
     initializeBlogs: () => dispatch(initializeBlogs()),
     createBlog: (blog) => dispatch(createBlog(blog)),
     likeBlog: (blog) => dispatch(likeBlog(blog))
