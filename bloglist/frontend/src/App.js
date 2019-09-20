@@ -20,7 +20,7 @@ import { initializeBlogs, createBlog, likeBlog } from './reducers/blogsReducer'
 
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect, withRouter
+  Route, Link,
 } from 'react-router-dom'
 
 const App = (props) => {
@@ -139,7 +139,7 @@ const App = (props) => {
   }
 
   const getBlogById = (id) => {
-    return props.bloglist.find( blog => blog.id === id)
+    return props.bloglist.find(blog => blog.id === id)
   }
 
   const loginForm = () => {
@@ -156,10 +156,10 @@ const App = (props) => {
 
   const loggedInUser = () => {
     return (
-      <>
+      <div className="logged-in">
         <p className="logged-user">{props.name} is logged in</p>
         <button id="logout" onClick={handleLogout}>logout</button>
-      </>
+      </div>
     )
   }
 
@@ -190,25 +190,33 @@ const App = (props) => {
     <div className="App">
 
       <Router>
-        <div className="router-nav">
-          <Link to="/" style={{ padding: 5 }}>Home</Link>
+        <div className="router-nav" style={{ backgroundColor: '#ccc' }}>
+          <Link to="/" style={{ padding: 5 }}>Blogs</Link>
           <Link to="/users" style={{ padding: 5 }}>Users</Link>
+          <div className="login">
+            {props.username !== '' && loggedInUser()}
+          </div>
         </div>
-
+        {props.username === '' && loginForm()}
         <h1 id="page-title">Blogs</h1>
         <Notification />
 
-        {props.username === '' && loginForm()}
-        {props.username !== '' && loggedInUser()}
+
+
         <Route exact path="/" render={() => {
           return props.username !== '' && blogsView()
         }} />
-        <Route exact path="/users" render={() => <UsersInfo />} />
+        <Route exact path="/users" render={() => {
+          return (
+            // props.username ? <UsersInfo /> : <Redirect to="/" />
+            <UsersInfo />
+          )
+        }} />
         <Route exact path="/users/:id" render={({ match }) =>
-          <User user={getUserById(match.params.id)} /> }
+          <User user={getUserById(match.params.id)} />}
         />
         <Route exact path="/blogs/:id" render={({ match }) =>
-          <BlogView blog={getBlogById(match.params.id)} /> }
+          <BlogView blog={getBlogById(match.params.id)} />}
         />
       </Router>
     </div>

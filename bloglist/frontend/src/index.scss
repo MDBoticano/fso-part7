@@ -42,9 +42,23 @@
   input { display: table-cell; }
 }
 
-.logged-user {
-  margin: 0 0 .25em 0;
+.login {
+  display: inline-block;
+
+  .logged-user {
+    display: inline-block;
+    margin: 0 0 .25em 0;
+  }
+
+  #logout {
+    margin: 0 5px;
+  }
 }
+
+.toggle-login {
+  background-color: red;
+}
+
 
 #blog-create-toggleable {
   margin: 1em 0;
