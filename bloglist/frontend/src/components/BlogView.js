@@ -70,6 +70,37 @@ const BlogView = ( props ) => {
     }
   }
 
+  const blogComments = (blog) => {
+    return (
+      <div className="blog-comments">
+        <h2>Comments</h2>
+        {commentAdder()}
+        {listComments(blog)}
+      </div>
+    )
+  }
+
+  const commentAdder = () => {
+    return (
+      <form onSubmit={addComment}>
+        <input type="text" />
+        <button type="submit">Add Comment</button>
+      </form>
+    )
+  }
+
+  const addComment = (event) => {
+    event.preventDefault()
+    return
+  }
+
+  const listComments = (blog) => {
+    if (!blog.comments) { return }
+    blog.comments.map( (comment, i) => {
+      return <li key={i}>{comment}</li>
+    })
+  }
+
   if (!props.blog) { return null }
 
   return (
@@ -79,6 +110,7 @@ const BlogView = ( props ) => {
         <p>{blogHasAuthor()}</p>
       </div>
       {blogDetails()}
+      {blogComments(props.blog)}
     </div>
   )
 

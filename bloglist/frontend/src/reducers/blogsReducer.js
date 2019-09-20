@@ -41,7 +41,9 @@ export const likeBlog = (obj) => {
   const incrementedLikes = obj.likes + 1
 
   /* Increase # of likes for blog */
-  const updatedObj = { ...obj, likes: incrementedLikes }
+  const updatedObj = { ...obj, likes: incrementedLikes, comments: [
+    'hello'
+  ] }
 
   return async(dispatch) => {
     const updatedBlog = await blogService.update(objId, updatedObj)
