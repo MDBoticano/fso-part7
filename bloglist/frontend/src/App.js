@@ -165,11 +165,11 @@ const App = (props) => {
 
   return (
     <div className="App">
-      <UsersInfo />
       <h1 id="page-title">Blogs</h1>
       <Notification />
       {props.username === '' && loginForm()}
       {props.username !== '' && blogsView()}
+      <UsersInfo />
     </div>
   )
 }
