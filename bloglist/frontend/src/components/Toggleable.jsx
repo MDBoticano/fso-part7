@@ -16,7 +16,7 @@ const Toggleable = React.forwardRef((props, ref) => {
   })
 
   return (
-    <div className="toggleable">
+    <div className="toggleable" id={props.id}>
       <div style={hideIfVisible} className="toggleable--hide">
         <Button
           onClick={toggleVisibility}
@@ -31,7 +31,6 @@ const Toggleable = React.forwardRef((props, ref) => {
         <Button
           onClick={toggleVisibility}
           className="toggleable--show-btn"
-          style={{ margin:'0 0.5em' }}
         >
           cancel
         </Button>

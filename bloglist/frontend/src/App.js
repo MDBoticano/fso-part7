@@ -135,7 +135,7 @@ const App = (props) => {
 
   const loginForm = () => {
     return (
-      <Toggleable buttonLabel="sign in">
+      <Toggleable id="login-toggle" buttonLabel="sign in">
         <LoginForm
           loginUsername={removeReset(loginUsername)}
           loginPassword={removeReset(loginPassword)}
@@ -160,7 +160,11 @@ const App = (props) => {
     return (
       <>
         <div id="blog-create-toggleable">
-          <Toggleable buttonLabel="new blog" ref={blogFormRef}>
+          <Toggleable
+            buttonLabel="new blog"
+            ref={blogFormRef}
+            id="create-blog-toggle"
+          >
             <CreateBlog
               addBlog={addBlog}
               title={removeReset(formTitle)}

@@ -63,11 +63,20 @@
   margin: 1em 0;
 }
 
-.toggleable--show {
+#login-toggle > .toggleable--show  {
   display: grid;
   grid-template-columns: auto auto;
   // align-items: center;
   // justify-items: center;
+  .toggleable--show-btn {
+    margin-left: 0.5em;
+  }
+}
+
+#create-blog-toggle > .toggleable--show {
+  .toggleable--show-btn { 
+    margin-top: 0.25em; 
+  }
 }
 
 .blog-entry {
