@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { deleteBlog, likeBlog, addComment } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Form } from 'semantic-ui-react'
 
 const BlogView = (props) => {
   const [formComment, setFormComment] = useState('')
@@ -85,10 +86,10 @@ const BlogView = (props) => {
 
   const commentAdder = () => {
     return (
-      <form onSubmit={submitComment}>
+      <Form onSubmit={submitComment}>
         <input type="text" value={formComment} onChange={handleForm} />
         <button type="submit">Add Comment</button>
-      </form>
+      </Form>
     )
   }
 

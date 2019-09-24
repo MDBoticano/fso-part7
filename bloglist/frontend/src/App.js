@@ -1,4 +1,3 @@
-// import React, { useState, useEffect } from 'react'
 import React, { useEffect } from 'react'
 
 import Toggleable from './components/Toggleable'
@@ -27,18 +26,12 @@ import {
 import { Container, Menu, Button } from 'semantic-ui-react'
 
 const App = (props) => {
-  // const ASCENDING = 'ascending'
-  // const DESCENDING = 'descending'
-
-  /* State values */
   const formTitle = useField('text')
   const formAuthor = useField('text')
   const formUrl = useField('text')
 
   const loginUsername = useField('text')
   const loginPassword = useField('password')
-
-  // const [sortDirection, setSortDirection] = useState(DESCENDING)
 
   /* Initialize blogs through Redux */
   const initializeBlogsProp = props.initializeBlogs
@@ -126,11 +119,6 @@ const App = (props) => {
     }
   }
 
-  // const listSortToggle = () => {
-  //   if (sortDirection === ASCENDING) { setSortDirection(DESCENDING) }
-  //   if (sortDirection === DESCENDING) { setSortDirection(ASCENDING) }
-  // }
-
   const removeReset = (fieldProp) => {
     //eslint-disable-next-line
     const { reset, ...restOfProps } = fieldProp
@@ -181,9 +169,6 @@ const App = (props) => {
             />
           </Toggleable>
         </div>
-        {/* <button id="toggle-bloglist-sort" onClick={listSortToggle}>
-          Sort by # of likes: {sortDirection}
-        </button> */}
         <Bloglist />
       </>
     )
@@ -202,7 +187,6 @@ const App = (props) => {
             </Menu.Item>
             <Menu.Item position="right" className="login">
               {props.username !== '' && loggedInUser()}
-              {/* {props.username === '' && 'please sign in'} */}
               {props.username === '' && loginForm()}
             </Menu.Item>
           </Menu>
