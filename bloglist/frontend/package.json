@@ -19,7 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "startwp": "webpack-dev-server --mode=development",
-    "buildwp": "webpack --mode=development",
+    "buildwp": "webpack --mode=production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "eslint": "eslint ."

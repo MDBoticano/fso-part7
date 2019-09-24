@@ -195,7 +195,6 @@ const App = (props) => {
             </Menu.Item>
           </Menu>
 
-          
           <h1 id="page-title">Blogs</h1>
 
           <Notification />
