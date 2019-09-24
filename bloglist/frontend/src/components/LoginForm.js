@@ -13,12 +13,12 @@ const LoginForm = ({
           <div className="twelve wide field">
             <label>username</label>
             <div className="ui input">
-              <input {...loginUsername} />
+              <input id="login-username" {...loginUsername} />
             </div>
           </div>
           <div className="twelve wide field">
             <label>password</label>
-            <input {...loginPassword} />
+            <input id="login-password" {...loginPassword} />
           </div>
           <Button type="submit">login</Button>
         </Form.Group>
