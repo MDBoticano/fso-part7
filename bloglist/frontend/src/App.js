@@ -24,7 +24,7 @@ import {
   Route, Link,
 } from 'react-router-dom'
 
-import { Container } from 'semantic-ui-react'
+import { Container, Menu, Button } from 'semantic-ui-react'
 
 const App = (props) => {
   // const ASCENDING = 'ascending'
@@ -147,7 +147,7 @@ const App = (props) => {
 
   const loginForm = () => {
     return (
-      <Toggleable buttonLabel="login">
+      <Toggleable buttonLabel="sign in">
         <LoginForm
           loginUsername={removeReset(loginUsername)}
           loginPassword={removeReset(loginPassword)}
@@ -161,7 +161,7 @@ const App = (props) => {
     return (
       <div className="logged-in">
         <p className="logged-user">{props.name} is logged in</p>
-        <button id="logout" onClick={handleLogout}>logout</button>
+        <Button id="logout" onClick={handleLogout}>logout</Button>
       </div>
     )
   }
@@ -193,15 +193,21 @@ const App = (props) => {
     <Container>
       <div className="App">
         <Router>
-          <div className="router-nav" style={{ backgroundColor: '#ccc' }}>
-            <Link to="/" style={{ padding: 5 }}>Blogs</Link>
-            <Link to="/users" style={{ padding: 5 }}>Users</Link>
-            <div className="login">
+          <Menu>
+            <Menu.Item link>
+              <Link to="/" style={{ padding: 5 }}>Blogs</Link>
+            </Menu.Item>
+            <Menu.Item>
+              <Link to="/users" style={{ padding: 5 }}>Users</Link>
+            </Menu.Item>
+            <Menu.Item position="right" className="login">
               {props.username !== '' && loggedInUser()}
-            </div>
-          </div>
+              {/* {props.username === '' && 'please sign in'} */}
+              {props.username === '' && loginForm()}
+            </Menu.Item>
+          </Menu>
 
-          {props.username === '' && loginForm()}
+          
           <h1 id="page-title">Blogs</h1>
 
           <Notification />

@@ -59,9 +59,15 @@
   background-color: red;
 }
 
-
 #blog-create-toggleable {
   margin: 1em 0;
+}
+
+.toggleable--show {
+  display: grid;
+  grid-template-columns: auto auto;
+  // align-items: center;
+  // justify-items: center;
 }
 
 .blog-entry {
