@@ -3,6 +3,7 @@ import Blog from './Blog'
 import { connect } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Table } from 'semantic-ui-react'
 
 const sortBlogs = (blogsArray, direction = 'descending') => {
   const blogsArrayCopy = [...blogsArray]
@@ -15,18 +16,19 @@ const sortBlogs = (blogsArray, direction = 'descending') => {
   return blogsArrayCopy
 }
 
-const Bloglist = ( props ) => {
+const Bloglist = (props) => {
   const deleteHandler = (blog, blogId) => {
     try {
       if (window.confirm(`Do you want to delete ${blog.title}`)) {
         props.deleteBlog(blogId)
         props.setNotification({
           message: `Successfully deleted '${blog.title}'`,
-          messageStyle: 'success' })
+          messageStyle: 'success'
+        })
       }
     } catch (error) {
       props.setNotification({
-        message:'Failed to delete blog',
+        message: 'Failed to delete blog',
         messageStyle: 'error'
       })
     }
@@ -44,7 +46,11 @@ const Bloglist = ( props ) => {
 
   return (
     <div id="bloglist">
-      {blogsList()}
+      <Table striped cell>
+        <Table.Body>
+          {blogsList()}
+        </Table.Body>
+      </Table>
     </div>
   )
 }
@@ -61,7 +67,8 @@ const mapDispatchToProps = (dispatch) => {
     likeBlog: obj => dispatch(likeBlog(obj)),
     deleteBlog: id => dispatch(deleteBlog(id)),
     setNotification: (message, time) => {
-      dispatch(setNotification(message, time)) },
+      dispatch(setNotification(message, time))
+    },
   }
 }
 

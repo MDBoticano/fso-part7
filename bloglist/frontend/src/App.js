@@ -23,6 +23,8 @@ import {
   Route, Link,
 } from 'react-router-dom'
 
+import { Container } from 'semantic-ui-react'
+
 const App = (props) => {
   const ASCENDING = 'ascending'
   const DESCENDING = 'descending'
@@ -187,39 +189,41 @@ const App = (props) => {
   }
 
   return (
-    <div className="App">
+    <Container>
+      <div className="App">
 
-      <Router>
-        <div className="router-nav" style={{ backgroundColor: '#ccc' }}>
-          <Link to="/" style={{ padding: 5 }}>Blogs</Link>
-          <Link to="/users" style={{ padding: 5 }}>Users</Link>
-          <div className="login">
-            {props.username !== '' && loggedInUser()}
+        <Router>
+          <div className="router-nav" style={{ backgroundColor: '#ccc' }}>
+            <Link to="/" style={{ padding: 5 }}>Blogs</Link>
+            <Link to="/users" style={{ padding: 5 }}>Users</Link>
+            <div className="login">
+              {props.username !== '' && loggedInUser()}
+            </div>
           </div>
-        </div>
-        {props.username === '' && loginForm()}
-        <h1 id="page-title">Blogs</h1>
-        <Notification />
+          {props.username === '' && loginForm()}
+          <h1 id="page-title">Blogs</h1>
+          <Notification />
 
 
 
-        <Route exact path="/" render={() => {
-          return props.username !== '' && blogsView()
-        }} />
-        <Route exact path="/users" render={() => {
-          return (
-            // props.username ? <UsersInfo /> : <Redirect to="/" />
-            <UsersInfo />
-          )
-        }} />
-        <Route exact path="/users/:id" render={({ match }) =>
-          <User user={getUserById(match.params.id)} />}
-        />
-        <Route exact path="/blogs/:id" render={({ match }) =>
-          <BlogView blog={getBlogById(match.params.id)} />}
-        />
-      </Router>
-    </div>
+          <Route exact path="/" render={() => {
+            return props.username !== '' && blogsView()
+          }} />
+          <Route exact path="/users" render={() => {
+            return (
+              // props.username ? <UsersInfo /> : <Redirect to="/" />
+              <UsersInfo />
+            )
+          }} />
+          <Route exact path="/users/:id" render={({ match }) =>
+            <User user={getUserById(match.params.id)} />}
+          />
+          <Route exact path="/blogs/:id" render={({ match }) =>
+            <BlogView blog={getBlogById(match.params.id)} />}
+          />
+        </Router>
+      </div>
+    </Container>
   )
 }
 
