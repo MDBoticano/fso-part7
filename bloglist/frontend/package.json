@@ -18,6 +18,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "buildwp": "webpack --mode=development",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "eslint": "eslint ."
@@ -39,8 +40,12 @@
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-react": "^7.0.0",
     "@testing-library/jest-dom": "^4.1.0",
     "@testing-library/react": "^9.1.4",
+    "babel-loader": "^8.0.6",
     "eslint-plugin-jest": "^22.15.2",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9"
