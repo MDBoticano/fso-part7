@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+// import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import Toggleable from './components/Toggleable'
 import LoginForm from './components/LoginForm'
@@ -26,8 +27,8 @@ import {
 import { Container } from 'semantic-ui-react'
 
 const App = (props) => {
-  const ASCENDING = 'ascending'
-  const DESCENDING = 'descending'
+  // const ASCENDING = 'ascending'
+  // const DESCENDING = 'descending'
 
   /* State values */
   const formTitle = useField('text')
@@ -37,7 +38,7 @@ const App = (props) => {
   const loginUsername = useField('text')
   const loginPassword = useField('password')
 
-  const [sortDirection, setSortDirection] = useState(DESCENDING)
+  // const [sortDirection, setSortDirection] = useState(DESCENDING)
 
   /* Initialize blogs through Redux */
   const initializeBlogsProp = props.initializeBlogs
@@ -125,10 +126,10 @@ const App = (props) => {
     }
   }
 
-  const listSortToggle = () => {
-    if (sortDirection === ASCENDING) { setSortDirection(DESCENDING) }
-    if (sortDirection === DESCENDING) { setSortDirection(ASCENDING) }
-  }
+  // const listSortToggle = () => {
+  //   if (sortDirection === ASCENDING) { setSortDirection(DESCENDING) }
+  //   if (sortDirection === DESCENDING) { setSortDirection(ASCENDING) }
+  // }
 
   const removeReset = (fieldProp) => {
     //eslint-disable-next-line
@@ -180,9 +181,9 @@ const App = (props) => {
             />
           </Toggleable>
         </div>
-        <button id="toggle-bloglist-sort" onClick={listSortToggle}>
+        {/* <button id="toggle-bloglist-sort" onClick={listSortToggle}>
           Sort by # of likes: {sortDirection}
-        </button>
+        </button> */}
         <Bloglist />
       </>
     )
@@ -191,7 +192,6 @@ const App = (props) => {
   return (
     <Container>
       <div className="App">
-
         <Router>
           <div className="router-nav" style={{ backgroundColor: '#ccc' }}>
             <Link to="/" style={{ padding: 5 }}>Blogs</Link>
@@ -200,18 +200,17 @@ const App = (props) => {
               {props.username !== '' && loggedInUser()}
             </div>
           </div>
+
           {props.username === '' && loginForm()}
           <h1 id="page-title">Blogs</h1>
+
           <Notification />
-
-
 
           <Route exact path="/" render={() => {
             return props.username !== '' && blogsView()
           }} />
           <Route exact path="/users" render={() => {
             return (
-              // props.username ? <UsersInfo /> : <Redirect to="/" />
               <UsersInfo />
             )
           }} />
