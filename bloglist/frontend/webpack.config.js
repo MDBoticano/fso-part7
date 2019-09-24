@@ -9,11 +9,21 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.js$/,
         loader: 'babel-loader',
         query: {
           presets: ['@babel/preset-env', '@babel/preset-react'],
         },
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-laoder', 'css-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: [
+          'style-loader', 'css-loader', 'sass-loader',
+        ],
       },
     ],
   },
