@@ -6,6 +6,11 @@ const config = {
     path: path.resolve(__dirname, 'build'),
     filename: 'main.js'
   },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'build'),
+    compress: true,
+    port: 3000,
+  },
   module: {
     rules: [
       {
@@ -17,10 +22,10 @@ const config = {
       },
       {
         test: /\.css$/,
-        loaders: ['style-laoder', 'css-loader'],
+        loaders: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.s[ac]ss$/,
+        test: /\.scss$/,
         use: [
           'style-loader', 'css-loader', 'sass-loader',
         ],
