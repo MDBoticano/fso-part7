@@ -1,24 +1,24 @@
 import React from 'react'
+import { Form, Button } from 'semantic-ui-react'
 
 const CreateBlog = ({ addBlog, author, title, url }) => {
-
   return (
-    <form id="create-blog" onSubmit={addBlog}>
+    <Form onSubmit={addBlog}>
       <h2>Add blog</h2>
-      <div className="blog-input">
+      <Form.Field required>
         <label htmlFor="title">Title</label>
         <input {...title} />
-      </div>
-      <div className="blog-input">
+      </Form.Field>
+      <Form.Field>
         <label htmlFor="author">Author</label>
         <input {...author} />
-      </div>
-      <div className="blog-input">
+      </Form.Field>
+      <Form.Field required>
         <label htmlFor="url">URL</label>
         <input {...url} />
-      </div>
-      <button type='submit'>Add</button>
-    </form>
+      </Form.Field>
+      <Button type='submit'>Add</Button>
+    </Form>
   )
 }
 
