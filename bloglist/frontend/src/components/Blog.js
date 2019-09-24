@@ -14,11 +14,10 @@ const Blog = ({ blog }) => {
   }
 
   return (
-    <Table.Row className="blog-entry">
+    // <Table.Row className="blog-entry">
+    <Table.Row>
       <Table.Cell>
-        <p style={{ margin: 0 }}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title} </Link>
-        </p>
+        <Link to={`/blogs/${blog.id}`}>{blog.title} </Link>
       </Table.Cell>
       <Table.Cell>
         {blogHasAuthor()}

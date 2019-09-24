@@ -46,8 +46,12 @@ const Bloglist = (props) => {
 
   return (
     <div id="bloglist">
-      <Table striped cell>
+      <Table padded>
         <Table.Body>
+          <Table.Row>
+            <Table.HeaderCell>Blog Title</Table.HeaderCell>
+            <Table.HeaderCell>Author</Table.HeaderCell>
+          </Table.Row>
           {blogsList()}
         </Table.Body>
       </Table>
