@@ -35,7 +35,7 @@ describe('Blog ', function () {
       cy.contains('Cyrus Cypress is logged in')
     })
 
-    it('user can signout', function() {
+    it('user can signout', function () {
       cy.contains('logout')
         .click()
       cy.contains('sign in')
@@ -65,13 +65,13 @@ describe('Blog ', function () {
             .click()
         })
 
-        it('the blog is still visible in the blogslist', function() {
+        it('the blog is still visible in the blogslist', function () {
           cy.contains('a', 'Blogs')
             .click()
           cy.contains('a', 'Five hundred days of Summer')
         })
 
-        it('the blog is counted in the users list', function() {
+        it('the blog is counted in the users list', function () {
           cy.contains('a', 'Users')
             .click()
           cy.contains('a', 'Cyrus Cypress')
@@ -83,13 +83,13 @@ describe('Blog ', function () {
           cy.contains('0 likes')
         })
 
-        it('the blog can be liked', function() {
+        it('the blog can be liked', function () {
           cy.contains('button', 'Like')
             .click()
           cy.contains('1 likes')
         })
 
-        it('a comment can be left', function() {
+        it('a comment can be left', function () {
           cy.get('#comment-text')
             .type('I liked this movie. Oh, it was a blog first?')
           cy.contains('Add Comment')
@@ -97,7 +97,21 @@ describe('Blog ', function () {
           cy.contains('I liked this movie. Oh, it was a blog first?')
         })
 
-        it('the blog can be deleted', function() {
+        it('the blog can be deleted', function () {
+          cy.get('.delete-btn')
+            .click()
+          cy.contains('a', 'Blogs')
+            .click()
+          cy.contains('a', 'Five hundred days of Summer').should('not.exist')
+          cy.contains('a', 'Users')
+            .click()
+          cy.contains('a', 'Cyrus Cypress').should('not.exist')
+        })
+
+        it('the blog can be deleted after liking it', function () {
+          cy.contains('button', 'Like')
+            .click()
+          cy.contains('1 likes')
           cy.get('.delete-btn')
             .click()
           cy.contains('a', 'Blogs')
