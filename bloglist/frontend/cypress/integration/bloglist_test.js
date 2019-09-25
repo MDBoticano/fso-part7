@@ -35,18 +35,54 @@ describe('Blog ', function () {
       cy.contains('Cyrus Cypress is logged in')
     })
 
-    it('user can add a new blog', function() {
-      cy.contains('new blog')
+    it('user can signout', function() {
+      cy.contains('logout')
         .click()
-      cy.get('#add-blog_title')
-        .type('Five hundred days of Summer')
-      cy.get('#add-blog_author')
-        .type('Noon')
-      cy.get('#add-blog_URL')
-        .type('https://www.google.com')
-      cy.contains('Add Blog')
-        .click()
-      cy.contains('Five hundred days of Summer')
+      cy.contains('sign in')
+    })
+
+    describe('user can add a new blog', function () {
+      beforeEach(function () {
+        cy.contains('new blog')
+          .click()
+        cy.get('#add-blog_title')
+          .type('Five hundred days of Summer')
+        cy.get('#add-blog_author')
+          .type('Noon')
+        cy.get('#add-blog_URL')
+          .type('https://www.google.com')
+        cy.contains('Add Blog')
+          .click()
+      })
+
+      it('the blog exists in the bloglist', function () {
+        cy.contains('Five hundred days of Summer')
+      })
+
+      describe('individual blog can be visited', function () {
+        beforeEach(function () {
+          cy.contains('a', 'Five hundred days of Summer')
+            .click()
+        })
+
+        it('the blog has 0 likes', function () {
+          cy.contains('0 likes')
+        })
+
+        it('the blog can be liked', function() {
+          cy.contains('button', 'Like')
+            .click()
+          cy.contains('1 likes')
+        })
+
+        it('a comment can be left', function() {
+          cy.get('#comment-text')
+            .type('I liked this movie. Oh, it was a blog first?')
+          cy.contains('Add Comment')
+            .click()
+          cy.contains('I liked this movie. Oh, it was a blog first?')
+        })
+      })
     })
   })
 })

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 
 export const useField = (type) => {
@@ -18,6 +18,15 @@ export const useField = (type) => {
     onChange,
     reset
   }
+}
+
+/* Previous props custom hook */
+export const usePrevious = (value) => {
+  const ref = useRef()
+  useEffect(() => {
+    ref.current = value
+  })
+  return ref.current
 }
 
 let token = null

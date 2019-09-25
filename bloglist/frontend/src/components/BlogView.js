@@ -87,7 +87,8 @@ const BlogView = (props) => {
   const commentAdder = () => {
     return (
       <Form onSubmit={submitComment}>
-        <input type="text" value={formComment} onChange={handleForm} />
+        <input id="comment-text"
+          type="text" value={formComment} onChange={handleForm} />
         <button type="submit">Add Comment</button>
       </Form>
     )

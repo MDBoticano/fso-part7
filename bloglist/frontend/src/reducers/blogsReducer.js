@@ -70,7 +70,18 @@ export const addComment = (blog, comment) => {
 const blogReducer = (state = [], action) => {
   switch(action.type){
   case INITIALIZE_BLOGS:
-    return action.data
+    const stateBlogsString = JSON.stringify(state)
+    const actionString = JSON.stringify(action.data)
+    // if (state.bloglist !== action.data) {
+    // console.log('current:', actionString)
+    // console.log('previous:', stateBlogsString)
+
+    if (stateBlogsString !== actionString) {
+      // console.log('current and previous are different, change state!')
+      return action.data
+    }
+    // console.log('they\'re the same, don\'t change state')
+    return state
   case NEW_BLOG:
     return [...state, action.data]
   case DELETE_BLOG:

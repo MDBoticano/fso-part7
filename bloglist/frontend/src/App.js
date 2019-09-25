@@ -10,7 +10,7 @@ import UsersInfo from './components/UsersInfo'
 import User from './components/User'
 
 import loginService from './services/login'
-import { useField } from './hooks/index'
+import { useField, /* usePrevious */ } from './hooks/index'
 import { getBlogsFromUser } from './utils/Blog_helper'
 
 import { connect } from 'react-redux'
@@ -35,9 +35,19 @@ const App = (props) => {
 
   /* Initialize blogs through Redux */
   const initializeBlogsProp = props.initializeBlogs
+  // const currentBlogs = props.bloglist
+  // const previousBlogs = usePrevious(currentBlogs)
   useEffect(() => {
+    // console.log('init')
+    // const currString = JSON.stringify(currentBlogs)
+    // const prevString = JSON.stringify(previousBlogs)
+
+    // if (currentBlogs !== previousBlogs) {
+    // if(currString !== prevString) {
     initializeBlogsProp()
-  }, [initializeBlogsProp])
+    // }
+  // }, [initializeBlogsProp, currentBlogs, previousBlogs])
+  }, [initializeBlogsProp, props.bloglist])
 
   // Check for logged in user
   useEffect(() => {
