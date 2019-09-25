@@ -65,6 +65,20 @@ describe('Blog ', function () {
             .click()
         })
 
+        it('the blog is still visible in the blogslist', function() {
+          cy.contains('a', 'Blogs')
+            .click()
+          cy.contains('a', 'Five hundred days of Summer')
+        })
+
+        it('the blog is counted in the users list', function() {
+          cy.contains('a', 'Users')
+            .click()
+          cy.contains('a', 'Cyrus Cypress')
+            .click()
+          cy.contains('Five hundred days of Summer')
+        })
+
         it('the blog has 0 likes', function () {
           cy.contains('0 likes')
         })
@@ -81,6 +95,17 @@ describe('Blog ', function () {
           cy.contains('Add Comment')
             .click()
           cy.contains('I liked this movie. Oh, it was a blog first?')
+        })
+
+        it('the blog can be deleted', function() {
+          cy.get('.delete-btn')
+            .click()
+          cy.contains('a', 'Blogs')
+            .click()
+          cy.contains('a', 'Five hundred days of Summer').should('not.exist')
+          cy.contains('a', 'Users')
+            .click()
+          cy.contains('a', 'Cyrus Cypress').should('not.exist')
         })
       })
     })
