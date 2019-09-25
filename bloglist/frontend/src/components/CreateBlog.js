@@ -7,17 +7,17 @@ const CreateBlog = ({ addBlog, author, title, url }) => {
       <h2>Add blog</h2>
       <Form.Field required>
         <label htmlFor="title">Title</label>
-        <input {...title} />
+        <input id="add-blog_title" {...title} />
       </Form.Field>
       <Form.Field>
         <label htmlFor="author">Author</label>
-        <input {...author} />
+        <input id="add-blog_author" {...author} />
       </Form.Field>
       <Form.Field required>
         <label htmlFor="url">URL</label>
-        <input {...url} />
+        <input id="add-blog_URL" {...url} />
       </Form.Field>
-      <Button type='submit'>Add</Button>
+      <Button type='submit'>Add Blog</Button>
     </Form>
   )
 }
