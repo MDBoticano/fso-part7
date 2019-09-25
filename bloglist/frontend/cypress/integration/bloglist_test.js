@@ -1,5 +1,12 @@
 describe('Blog ', function() {
   beforeEach(function() {
+    cy.request('POST', 'http://localhost:3001/api/testing/reset')
+    const user = {
+      name: 'Cyrus Cypress',
+      username: 'cici',
+      password: 'pizza'
+    }
+    cy.request('POST', 'http://localhost:3001/api/users', user)
     cy.visit('http://localhost:3000')
   })
 
@@ -16,11 +23,11 @@ describe('Blog ', function() {
     cy.contains('sign in')
       .click()
     cy.get('#login-username')
-      .type('Jane')
+      .type('cici')
     cy.get('#login-password')
-      .type('sugarCane')
+      .type('pizza')
     cy.contains('login')
       .click()
-    cy.contains('Jane Cane is logged in')
+    cy.contains('Cyrus Cypress is logged in')
   })
 })
